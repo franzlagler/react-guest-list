@@ -110,7 +110,7 @@ function App() {
 
   const handleUpdatePersonData = () => {
     async function updateGuestData() {
-      const rawData = await fetch(`${baseUrl}/${idToUpdate}`, {
+      await fetch(`${baseUrl}/${idToUpdate}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
