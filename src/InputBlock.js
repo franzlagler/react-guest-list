@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 const Label = styled.label`
   display: block;
   margin: 0 0 10px 5px;
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bolder;
 `;
 

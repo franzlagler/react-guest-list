@@ -27,6 +27,7 @@ function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [idToUpdate, setIdToUpdate] = useState();
 
   const firstUpdate = useRef(true);
 
@@ -84,6 +85,44 @@ function App() {
     }
 
     updateGuest();
+  };
+
+  // Get Name of individual guest to be updated
+
+  const handleFetchPersonData = ({ currentTarget }) => {
+    const id = currentTarget.id;
+
+    async function getGuestData() {
+      const rawData = await fetch(`${baseUrl}/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await rawData.json();
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setIdToUpdate(id);
+    }
+
+    getGuestData();
+  };
+
+  const handleUpdatePersonData = () => {
+    async function updateGuestData() {
+      const rawData = await fetch(`${baseUrl}/${idToUpdate}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+      });
+      setFetchList((prev) => [...prev]);
+      setFirstName('');
+      setLastName('');
+    }
+
+    updateGuestData();
   };
   // Delete an individual Guest from the list
   const handleDeleteOneClick = ({ currentTarget }) => {
@@ -157,20 +196,21 @@ function App() {
             value={lastName}
             handleInputChange={handleLastNameInputChange}
           />
-          <Button
-            margin="20px auto 0 auto"
-            width="50%"
-            onClick={handleAddClick}
-          >
+          <Button margin="20px auto 0 auto" onClick={handleAddClick}>
             Submit
+          </Button>
+          <Button margin="20px auto 0 auto" onClick={handleUpdatePersonData}>
+            Update
           </Button>
           <HorizontalRuler />
         </Container>
         <Container id="guestListContainer" width="400px" margin="0 auto">
-          <Heading2>Preview</Heading2>
+          <Heading2>Invited People</Heading2>
+
           <GuestList
             guestList={guestList}
             handleCheckboxChange={handleCheckboxChange}
+            handleFetchPersonData={handleFetchPersonData}
             handleDeleteOneClick={handleDeleteOneClick}
             handleDeleteAllClick={handleDeleteAllClick}
           />

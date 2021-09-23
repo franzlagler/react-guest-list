@@ -2,8 +2,10 @@ import styled from '@emotion/styled';
 import check from '../public/images/check.svg';
 
 const Input = styled.input`
+  display: inline-block;
   appearance: none;
-  height: 20px;
+  margin-right: 20px;
+  height: 30px;
   aspect-ratio: 1;
   border: 1px solid black;
   border-radius: 5px;

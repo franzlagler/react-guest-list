@@ -2,8 +2,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: ${(props) => (props.display ? props.display : 'block')};
-  justify-content: center;
-  grid-gap: 200px;
+  align-items: center;
   width: ${(props) => (props.width ? props.width : 'auto')};
   max-width: ${(props) => (props.maxWidth ? props.maxWidth : '')};
   margin: ${(props) => (props.margin ? props.margin : '0 auto')};
