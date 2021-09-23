@@ -1,22 +1,31 @@
-import Button from './Components/Button';
-import Checkbox from './Components/Checkbox';
+import styled from '@emotion/styled';
+import Button from './Button';
+import Checkbox from './Checkbox';
+
+const List = styled.ul``;
+
+const ItemField = styled.div`
+  display: flex;
+`;
+
+const ItemText = styled.li``;
 
 function GuestList(props) {
   return (
     <div>
-      {props.guestList.map((el, index) => {
+      {props.guestList.map((el) => {
         return (
-          <ul key={Math.random() * 1000}>
-            <div>
-              <li>
+          <List key={el.id}>
+            <ItemField>
+              <ItemText>
                 {el.firstName} {el.lastName}
-              </li>
-              <Checkbox />
-              <Button id={index} onClick={props.handleDeleteButton}>
+              </ItemText>
+              <Checkbox id={`check${el.id}`} />
+              <Button id={el.id} noBorder onClick={props.handleDeleteOneClick}>
                 Delete
               </Button>
-            </div>
-          </ul>
+            </ItemField>
+          </List>
         );
       })}
     </div>

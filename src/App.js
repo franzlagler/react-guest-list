@@ -1,44 +1,70 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useState } from 'react';
-import Button from './Components/Button';
-import Container from './Components/Container';
-import InputBlock from './Components/InputBlock';
+import Button from './Button';
+import Container from './Container';
 import GuestList from './GuestList';
+import InputBlock from './InputBlock';
 
 function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
 
+  // Control variable for reloading guest list from server
+  const [fetchList, setFetchList] = useState(['fetch']);
+
+  const baseUrl = 'http://localhost:5000';
+
+  // Keep track of input changes
   const handleFirstNameInputChange = ({ currentTarget }) => {
     const input = currentTarget.value;
     setFirstName(input);
   };
-
   const handleLastNameInputChange = ({ currentTarget }) => {
     const input = currentTarget.value;
     setLastName(input);
   };
+  // Add a guest to the list
+  const handleAddClick = () => {
+    async function addGuest() {
+      await fetch(`${baseUrl}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+      });
 
-  const handleSubmit = () => {
-    setGuestList((prev) => {
-      const updatedArray = [...prev];
-      updatedArray.push({ firstName: firstName, lastName: lastName });
-      setGuestList(updatedArray);
-    });
+      setFetchList((prev) => [...prev]);
+      setFirstName('');
+      setLastName('');
+    }
+
+    addGuest();
   };
+  // Delete an individual Guest from the list
+  const handleDeleteOneClick = ({ currentTarget }) => {
+    const id = Number.parseInt(currentTarget.id);
 
-  const handleDeleteButton = ({ currentTarget }) => {
-    const id = currentTarget.id;
+    async function deleteGuest() {
+      await fetch(`${baseUrl}/${id}`, {
+        method: 'DELETE',
+      });
 
-    const updatedGuestList = guestList.filter((el) => el !== guestList[id]);
-    setGuestList(updatedGuestList);
+      setFetchList((prev) => [...prev]);
+    }
+
+    deleteGuest();
   };
-
+  // Reload guest list whenever fetchList const is being changed
   useEffect(() => {
-    setFirstName('');
-    setLastName('');
-  }, [guestList]);
+    async function fetchData() {
+      const rawData = await fetch(`${baseUrl}/`);
+      const data = await rawData.json();
+      setGuestList(data);
+    }
+    fetchData();
+  }, [fetchList]);
 
   return (
     <Container
@@ -61,14 +87,14 @@ function App() {
           value={lastName}
           handleInputChange={handleLastNameInputChange}
         />
-        <Button width="100%" onClick={handleSubmit}>
+        <Button width="100%" onClick={handleAddClick}>
           Submit
         </Button>
       </Container>
       <Container id="guestListContainer" maxWidth="400px">
         <GuestList
           guestList={guestList}
-          handleDeleteButton={handleDeleteButton}
+          handleDeleteOneClick={handleDeleteOneClick}
         />
       </Container>
     </Container>

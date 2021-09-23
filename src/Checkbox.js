@@ -12,7 +12,7 @@ const Input = styled.input`
   }
 `;
 
-function Checkbox() {
-  return <Input type="checkbox" />;
+function Checkbox(props) {
+  return <Input type="checkbox" id={props.id} />;
 }
 export default Checkbox;
