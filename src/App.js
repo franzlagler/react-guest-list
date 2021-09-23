@@ -30,15 +30,8 @@ function App() {
 
   const handleDeleteButton = ({ currentTarget }) => {
     const id = currentTarget.id;
-    const updatedGuestList = [];
-    for (let i = 0; i < guestList.length; i++) {
-      if (guestList[i] === guestList[id]) {
-        continue;
-      }
 
-      updatedGuestList.push(guestList[i]);
-    }
-
+    const updatedGuestList = guestList.filter((el) => el !== guestList[id]);
     setGuestList(updatedGuestList);
   };
 
