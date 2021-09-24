@@ -37,6 +37,8 @@ function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [disableUpdateButton, setDisableUpdateButton] = useState(true);
+  const [disableAddButton, setDisableAddButton] = useState(false);
   const [disableAllFields, setDisableAllFields] = useState(true);
   const [idToUpdate, setIdToUpdate] = useState();
 
@@ -82,6 +84,8 @@ function App() {
     });
     const data = await rawData.json();
     changeNameInputs(data.firstName, data.lastName);
+    setDisableUpdateButton(false);
+    setDisableAddButton(true);
     setIdToUpdate(id);
   }
   // Update the data of an individual guest
@@ -94,6 +98,8 @@ function App() {
       body: JSON.stringify({ firstName: firstName, lastName: lastName }),
     });
     setFetchList((prev) => [...prev]);
+    setDisableUpdateButton(true);
+    setDisableAddButton(false);
     changeNameInputs('', '');
   }
   // Update the attending status of an individual guest
@@ -194,6 +200,8 @@ function App() {
             handleLastNameInputChange={handleLastNameInputChange}
             handleAddClick={handleAddClick}
             handleUpdateClick={handleUpdateClick}
+            disableAddButton={disableAddButton}
+            disableUpdateButton={disableUpdateButton}
             disableAllFields={disableAllFields}
           />
         </ManageListContainer>

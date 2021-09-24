@@ -4,29 +4,30 @@ import Checkbox from './Checkbox';
 import SmallButton from './SmallButton';
 
 const List = styled.div`
-  padding: 5px 20px;
   background-color: #fff;
   border: 2px solid #212529;
   border-radius: 15px;
 `;
 
-const ItemField = styled.div`
+const ItemContent = styled.div`
+  padding: 5px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 15px;
 `;
 
-const ItemLeftContainer = styled.div`
+const ItemLeftContent = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const ItemRightContainer = styled.div`
+const ItemRightContent = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-const ItemText = styled.p`
+const ItemTextContent = styled.p`
   margin: 'auto';
   list-style-type: none;
   font-size: 16px;
@@ -40,24 +41,26 @@ const ButtonContainer = styled.div`
 function DisplayGuests(props) {
   if (props.disableAllFields) {
     return <p>Loading list ...</p>;
+  } else if (props.guestList.length === 0) {
+    return <p>No people added to the list.</p>;
   } else {
     return (
       <>
         <List>
           {props.guestList.map((el) => {
             return (
-              <ItemField key={el.id}>
-                <ItemLeftContainer id="checkboxNameContainer">
+              <ItemContent key={el.id}>
+                <ItemLeftContent id="checkboxNameContainer">
                   <Checkbox
                     id={el.id}
                     handleCheckboxChange={props.handleCheckboxChange}
                     checked={el.attending}
                   />
-                  <ItemText>
+                  <ItemTextContent>
                     {el.firstName} {el.lastName}
-                  </ItemText>
-                </ItemLeftContainer>
-                <ItemRightContainer>
+                  </ItemTextContent>
+                </ItemLeftContent>
+                <ItemRightContent>
                   <SmallButton
                     id={el.id}
                     onClick={props.handleGetIndividualPersonData}
@@ -72,8 +75,8 @@ function DisplayGuests(props) {
                   >
                     <span aria-label="delete">⨉</span>
                   </SmallButton>
-                </ItemRightContainer>
-              </ItemField>
+                </ItemRightContent>
+              </ItemContent>
             );
           })}
         </List>

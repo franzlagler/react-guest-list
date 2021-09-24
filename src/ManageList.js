@@ -30,14 +30,14 @@ function ManageListContainer(props) {
         <BigButton
           backgroundColor="#cce3de"
           onClick={props.handleAddClick}
-          disabled={props.disableAllFields}
+          disabled={props.disableAllFields || props.disableAddButton}
         >
           Add
         </BigButton>
         <BigButton
           backgroundColor="#ffdd00"
           onClick={props.handleUpdateClick}
-          disabled={props.disableAllFields}
+          disabled={props.disableAllFields || props.disableUpdateButton}
         >
           Update
         </BigButton>
