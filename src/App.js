@@ -1,13 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css, Global } from '@emotion/react';
+import styled from '@emotion/styled';
 import { useEffect, useRef, useState } from 'react';
-import Button from './Button';
-import Container from './Container';
-import GuestList from './GuestList';
-import Heading1 from './Heading1';
+import DisplayGuests from './DisplayGuests';
 import Heading2 from './Heading2';
 import HorizontalRuler from './HorizontalRuler';
-import InputBlock from './InputBlock';
+import MainContainer from './MainContainer';
+import MainHeading from './MainHeading';
+import ManageList from './ManageList';
+
+// Styles
 
 const globalStyle = css`
   *,
@@ -23,10 +25,19 @@ const globalStyle = css`
   }
 `;
 
+const ManageListContainer = styled.div`
+  padding: 0 15%;
+`;
+
+const DisplayGuestContainer = styled.div`
+  padding: 0 15%;
+`;
+
 function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [disableAllFields, setDisableAllFields] = useState(true);
   const [idToUpdate, setIdToUpdate] = useState();
 
   const firstUpdate = useRef(true);
@@ -35,6 +46,88 @@ function App() {
   const [fetchList, setFetchList] = useState(['fetch']);
 
   const baseUrl = 'http://localhost:5000';
+
+  const changeNameInputs = (text1, text2) => {
+    setFirstName(text1);
+    setLastName(text2);
+  };
+
+  // Get guest list data from server
+  async function fetchGuestListData() {
+    const rawData = await fetch(`${baseUrl}/`);
+    const data = await rawData.json();
+    setGuestList(data);
+  }
+
+  // Add a guest to the list
+  async function addGuest() {
+    await fetch(`${baseUrl}/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+    });
+
+    setFetchList((prev) => [...prev]);
+    changeNameInputs('', '');
+  }
+  // Get the data of an inidividual guest
+  async function getIndividualGuestData(id) {
+    const rawData = await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = await rawData.json();
+    changeNameInputs(data.firstName, data.lastName);
+    setIdToUpdate(id);
+  }
+  // Update the data of an individual guest
+  async function updateGuestData() {
+    await fetch(`${baseUrl}/${idToUpdate}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+    });
+    setFetchList((prev) => [...prev]);
+    changeNameInputs('', '');
+  }
+  // Update the attending status of an individual guest
+  async function updateAttendingStatus(id, isChecked) {
+    await fetch(`${baseUrl}/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ attending: isChecked }),
+    });
+
+    setFetchList((prev) => [...prev]);
+  }
+  // Delete a guest from the guest list
+  async function deleteGuest(id) {
+    await fetch(`${baseUrl}/${id}`, {
+      method: 'DELETE',
+    });
+
+    setFetchList((prev) => [...prev]);
+  }
+
+  // Delete all guest from the guest list
+  async function deleteAllGuests() {
+    for (let i = 0; i < guestList.length; i++) {
+      const currentId = guestList[i].id;
+      await fetch(`${baseUrl}/${currentId}`, {
+        method: 'DELETE',
+      });
+    }
+
+    setFetchList((prev) => [...prev]);
+  }
 
   // Keep track of input changes
   const handleFirstNameInputChange = ({ currentTarget }) => {
@@ -45,177 +138,78 @@ function App() {
     const input = currentTarget.value;
     setLastName(input);
   };
-  // Add a guest to the list
+
   const handleAddClick = () => {
-    async function addGuest() {
-      await fetch(`${baseUrl}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
-      });
-
-      setFetchList((prev) => [...prev]);
-      setFirstName('');
-      setLastName('');
-    }
-
     addGuest();
   };
-
-  // Track if checkbox is checked
 
   const handleCheckboxChange = ({ currentTarget }) => {
     const id = currentTarget.id;
     const isChecked = currentTarget.checked;
-
-    console.log(isChecked);
-
-    async function updateGuest() {
-      await fetch(`${baseUrl}/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ attending: isChecked }),
-      });
-
-      setFetchList((prev) => [...prev]);
-    }
-
-    updateGuest();
+    updateAttendingStatus(id, isChecked);
   };
 
-  // Get Name of individual guest to be updated
-
-  const handleFetchPersonData = ({ currentTarget }) => {
+  const handleGetIndividualPersonData = ({ currentTarget }) => {
     const id = currentTarget.id;
-
-    async function getGuestData() {
-      const rawData = await fetch(`${baseUrl}/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await rawData.json();
-      setFirstName(data.firstName);
-      setLastName(data.lastName);
-      setIdToUpdate(id);
-    }
-
-    getGuestData();
+    getIndividualGuestData(id);
   };
 
-  const handleUpdatePersonData = () => {
-    async function updateGuestData() {
-      await fetch(`${baseUrl}/${idToUpdate}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
-      });
-      setFetchList((prev) => [...prev]);
-      setFirstName('');
-      setLastName('');
-    }
-
+  const handleUpdateClick = () => {
     updateGuestData();
   };
-  // Delete an individual Guest from the list
+
   const handleDeleteOneClick = ({ currentTarget }) => {
     const id = currentTarget.id;
-
-    async function deleteGuest() {
-      await fetch(`${baseUrl}/${id}`, {
-        method: 'DELETE',
-      });
-
-      setFetchList((prev) => [...prev]);
-    }
-
-    deleteGuest();
+    deleteGuest(id);
   };
 
   const handleDeleteAllClick = () => {
-    async function deleteGuest() {
-      for (let i = 0; i < guestList.length; i++) {
-        const currentId = guestList[i].id;
-        await fetch(`${baseUrl}/${currentId}`, {
-          method: 'DELETE',
-        });
-      }
-
-      setFetchList((prev) => [...prev]);
-    }
-
-    deleteGuest();
+    deleteAllGuests();
   };
 
-  // Reload guest list whenever fetchList const is being changed
   useEffect(() => {
-    async function fetchData() {
-      const rawData = await fetch(`${baseUrl}/`);
-      const data = await rawData.json();
-      setGuestList(data);
-    }
     if (firstUpdate.current === true) {
       firstUpdate.current = false;
 
       // Simulating the Server Load
-      setTimeout(fetchData, 3000);
+      setTimeout(() => {
+        setDisableAllFields(false);
+        fetchGuestListData();
+      }, 3000);
     } else {
-      fetchData();
+      fetchGuestListData();
     }
   }, [fetchList]);
 
   return (
     <>
       <Global styles={globalStyle} />
-      <Container
-        id="mainContainer"
-        maxWidth="800px"
-        padding="2%"
-        backgroundColor="#f8f9fa"
-        border="2px solid #212529"
-      >
-        <Heading1>Guest List App</Heading1>
-        <Container id="inputContainer" width="400px" margin="0 auto">
-          <Heading2>Manage List</Heading2>
-          <InputBlock
-            id="firstName"
-            name="First Name"
-            value={firstName}
-            handleInputChange={handleFirstNameInputChange}
+      <MainContainer>
+        <MainHeading />
+        <ManageListContainer>
+          <ManageList
+            firstName={firstName}
+            lastName={lastName}
+            handleFirstNameInputChange={handleFirstNameInputChange}
+            handleLastNameInputChange={handleLastNameInputChange}
+            handleAddClick={handleAddClick}
+            handleUpdateClick={handleUpdateClick}
+            disableAllFields={disableAllFields}
           />
-          <InputBlock
-            id="lastName"
-            name="Last Name"
-            value={lastName}
-            handleInputChange={handleLastNameInputChange}
-          />
-          <Button margin="20px auto 0 auto" onClick={handleAddClick}>
-            Submit
-          </Button>
-          <Button margin="20px auto 0 auto" onClick={handleUpdatePersonData}>
-            Update
-          </Button>
-          <HorizontalRuler />
-        </Container>
-        <Container id="guestListContainer" width="400px" margin="0 auto">
+        </ManageListContainer>
+        <HorizontalRuler />
+        <DisplayGuestContainer>
           <Heading2>Invited People</Heading2>
-
-          <GuestList
+          <DisplayGuests
             guestList={guestList}
+            disableAllFields={disableAllFields}
             handleCheckboxChange={handleCheckboxChange}
-            handleFetchPersonData={handleFetchPersonData}
+            handleGetIndividualPersonData={handleGetIndividualPersonData}
             handleDeleteOneClick={handleDeleteOneClick}
             handleDeleteAllClick={handleDeleteAllClick}
           />
-        </Container>
-      </Container>
+        </DisplayGuestContainer>
+      </MainContainer>
     </>
   );
 }

@@ -12,6 +12,9 @@ const Input = styled.input`
 
   &:checked {
     background-image: url(${check});
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 `;
 

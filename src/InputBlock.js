@@ -20,6 +20,10 @@ const Input = styled.input`
     outline: none;
     box-shadow: 0 0 0 4px #cce3de;
   }
+  &:disabled {
+    background-color: #ced4da;
+    opacity: 0.4;
+  }
 `;
 
 function InputBlock(props) {
@@ -30,6 +34,7 @@ function InputBlock(props) {
         id={props.id}
         onChange={props.handleInputChange}
         value={props.value}
+        disabled={props.disabled}
       />
     </>
   );
