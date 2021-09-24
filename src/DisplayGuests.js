@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import BigButton from './BigButton';
 import Checkbox from './Checkbox';
-import Heading2 from './Heading2';
 import SmallButton from './SmallButton';
 
 const List = styled.div`
