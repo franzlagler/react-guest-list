@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import BigButton from './BigButton';
 import Checkbox from './Checkbox';
+import LinkButton from './LinkButton';
 import SearchBar from './SearchBar';
 import SmallButton from './SmallButton';
 
@@ -38,9 +39,19 @@ const ItemTextContent = styled.p`
   font-size: 16px;
 `;
 
-const ButtonContainer = styled.div`
+const DeleteAllButtonContainer = styled.div`
   display: flex;
   justify-content: center;
+`;
+
+const FilterButtonContainer = styled.div`
+  padding: 0 16px;
+  background-color: #cce3de;
+  border-bottom: 2px solid #212529;
+`;
+
+const NoResultsPara = styled.p`
+  padding: 8px 16px;
 `;
 
 function DisplayGuests(props) {
@@ -55,58 +66,59 @@ function DisplayGuests(props) {
       <>
         <List>
           <SearchBar handleSearchBarChange={props.handleSearchBarChange} />
-          {currentGuestList.map((el) => {
-            return (
-              <ItemContent key={el.id}>
-                <ItemLeftContent id="checkboxNameContainer">
-                  <Checkbox
-                    id={el.id}
-                    handleCheckboxChange={props.handleCheckboxChange}
-                    checked={el.attending}
-                  />
-                  <ItemTextContent>
-                    {el.firstName} {el.lastName}
-                  </ItemTextContent>
-                </ItemLeftContent>
-                <ItemRightContent>
-                  <SmallButton
-                    id={el.id}
-                    onClick={props.handleGetIndividualPersonData}
-                    backgroundColor="#ffdd00"
-                  >
-                    <span aria-label="edit">✐</span>
-                  </SmallButton>
-                  <SmallButton
-                    id={el.id}
-                    onClick={props.handleDeleteOneClick}
-                    backgroundColor="#f26a4f"
-                  >
-                    <span aria-label="delete">⨉</span>
-                  </SmallButton>
-                </ItemRightContent>
-              </ItemContent>
-            );
-          })}
+          <FilterButtonContainer>
+            <LinkButton id="all" onClick={props.handleFilterMethodClick}>
+              All
+            </LinkButton>
+            <LinkButton id="attending" onClick={props.handleFilterMethodClick}>
+              Attending
+            </LinkButton>
+            <LinkButton
+              id="nonAttending"
+              onClick={props.handleFilterMethodClick}
+            >
+              Non-Attending
+            </LinkButton>
+          </FilterButtonContainer>
+          {currentGuestList !== 0 &&
+            currentGuestList.map((el) => {
+              return (
+                <ItemContent key={el.id}>
+                  <ItemLeftContent id="checkboxNameContainer">
+                    <Checkbox
+                      id={el.id}
+                      handleCheckboxChange={props.handleCheckboxChange}
+                      checked={el.attending}
+                    />
+                    <ItemTextContent>
+                      {el.firstName} {el.lastName}
+                    </ItemTextContent>
+                  </ItemLeftContent>
+                  <ItemRightContent>
+                    <SmallButton
+                      id={el.id}
+                      onClick={props.handleGetIndividualPersonData}
+                      backgroundColor="#ffdd00"
+                    >
+                      <span aria-label="edit">✐</span>
+                    </SmallButton>
+                    <SmallButton
+                      id={el.id}
+                      onClick={props.handleDeleteOneClick}
+                      backgroundColor="#f26a4f"
+                    >
+                      <span aria-label="delete">⨉</span>
+                    </SmallButton>
+                  </ItemRightContent>
+                </ItemContent>
+              );
+            })}
+          {currentGuestList.length === 0 && (
+            <NoResultsPara>No results found.</NoResultsPara>
+          )}
         </List>
-        <ButtonContainer>
-          <SmallButton
-            id="all"
-            backgroundColor="#f8f9fa"
-            onClick={props.handleFilterMethodClick}
-          >
-            All
-          </SmallButton>
-          <SmallButton id="attending" onClick={props.handleFilterMethodClick}>
-            Attending
-          </SmallButton>
-          <SmallButton
-            id="nonAttending"
-            onClick={props.handleFilterMethodClick}
-          >
-            Non-Attending
-          </SmallButton>
-        </ButtonContainer>
-        <ButtonContainer>
+
+        <DeleteAllButtonContainer>
           <BigButton
             backgroundColor="#f26a4f"
             onClick={props.handleDeleteAllClick}
@@ -114,7 +126,7 @@ function DisplayGuests(props) {
           >
             Delete All
           </BigButton>
-        </ButtonContainer>
+        </DeleteAllButtonContainer>
       </>
     );
   }

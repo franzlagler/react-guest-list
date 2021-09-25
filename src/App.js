@@ -44,7 +44,7 @@ function App() {
   const [filterMethod, setFilterMethod] = useState(() => {
     return (el) => el;
   });
-
+  const firstNameInputField = useRef(null);
   const firstUpdate = useRef(true);
 
   // Control variable for reloading guest list from server
@@ -161,6 +161,7 @@ function App() {
   const handleGetIndividualPersonData = ({ currentTarget }) => {
     const id = currentTarget.id;
     getIndividualGuestData(id);
+    firstNameInputField.current.focus();
   };
 
   const handleUpdateClick = () => {
@@ -216,6 +217,7 @@ function App() {
     });
   };
 
+  // Fetch Guest List from Server
   useEffect(() => {
     if (firstUpdate.current === true) {
       firstUpdate.current = false;
@@ -248,6 +250,7 @@ function App() {
             disableAddButton={disableAddButton}
             disableUpdateButton={disableUpdateButton}
             disableAllFields={disableAllFields}
+            firstNameInputField={firstNameInputField}
           />
         </ManageListContainer>
         <HorizontalRuler />

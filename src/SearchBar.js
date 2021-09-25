@@ -5,7 +5,7 @@ import search from '../public/images/search.svg';
 const Input = styled.input`
   width: 100%;
   padding: 16px 20px;
-  background-color: #cce3de;
+  background-color: inherit;
   background-image: url(${search});
   background-repeat: no-repeat;
   background-size: 24px;

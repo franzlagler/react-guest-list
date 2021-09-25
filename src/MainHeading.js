@@ -5,6 +5,7 @@ const HeadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 50px;
 `;
 
 const Image = styled.img`
@@ -13,7 +14,7 @@ const Image = styled.img`
 `;
 
 const Heading1 = styled.h1`
-  margin-bottom: 50px;
+  margin: 0;
   font-size: 60px;
   text-align: center;
   letter-spacing: 2px;

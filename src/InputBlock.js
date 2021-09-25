@@ -35,6 +35,7 @@ function InputBlock(props) {
         onChange={props.handleInputChange}
         value={props.value}
         disabled={props.disabled}
+        ref={props.firstNameInputField}
       />
     </>
   );

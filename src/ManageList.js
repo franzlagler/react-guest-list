@@ -18,6 +18,7 @@ function ManageListContainer(props) {
         value={props.firstName}
         handleInputChange={props.handleFirstNameInputChange}
         disabled={props.disableAllFields}
+        firstNameInputField={props.firstNameInputField}
       />
       <InputBlock
         id="lastName"
