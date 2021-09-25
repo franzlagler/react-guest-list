@@ -174,6 +174,9 @@ function App() {
 
   const handleDeleteAllClick = () => {
     deleteAllGuests();
+    setFilterMethod(() => {
+      return (el) => el;
+    });
   };
 
   const handleFilterMethodClick = ({ currentTarget }) => {
@@ -195,6 +198,22 @@ function App() {
     }
 
     setFetchList((prev) => [...prev]);
+  };
+
+  const handleSearchBarChange = ({ currentTarget }) => {
+    const input = currentTarget.value;
+
+    if (input.length === 0) {
+      setFilterMethod(() => {
+        return (el) => el;
+      });
+
+      return;
+    }
+    setFilterMethod(() => {
+      return (el) =>
+        el.firstName.includes(input) || el.lastName.includes(input);
+    });
   };
 
   useEffect(() => {
@@ -243,6 +262,7 @@ function App() {
             handleDeleteOneClick={handleDeleteOneClick}
             handleDeleteAllClick={handleDeleteAllClick}
             handleFilterMethodClick={handleFilterMethodClick}
+            handleSearchBarChange={handleSearchBarChange}
           />
         </DisplayGuestContainer>
       </MainContainer>

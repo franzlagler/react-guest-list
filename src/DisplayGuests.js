@@ -1,21 +1,25 @@
 import styled from '@emotion/styled';
 import BigButton from './BigButton';
 import Checkbox from './Checkbox';
+import SearchBar from './SearchBar';
 import SmallButton from './SmallButton';
 
 const List = styled.div`
-  margin-bottom: 20px;
+  margin: 20px 0;
   background-color: #fff;
   border: 2px solid #212529;
   border-radius: 15px;
 `;
 
 const ItemContent = styled.div`
-  padding: 4px 16px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-radius: 15px;
+  &:first-of-type {
+    margin-top: 10px;
+  }
 `;
 
 const ItemLeftContent = styled.div`
@@ -50,6 +54,7 @@ function DisplayGuests(props) {
     return (
       <>
         <List>
+          <SearchBar handleSearchBarChange={props.handleSearchBarChange} />
           {currentGuestList.map((el) => {
             return (
               <ItemContent key={el.id}>
@@ -84,7 +89,11 @@ function DisplayGuests(props) {
           })}
         </List>
         <ButtonContainer>
-          <SmallButton id="all" onClick={props.handleFilterMethodClick}>
+          <SmallButton
+            id="all"
+            backgroundColor="#f8f9fa"
+            onClick={props.handleFilterMethodClick}
+          >
             All
           </SmallButton>
           <SmallButton id="attending" onClick={props.handleFilterMethodClick}>
