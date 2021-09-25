@@ -4,13 +4,14 @@ import Checkbox from './Checkbox';
 import SmallButton from './SmallButton';
 
 const List = styled.div`
+  margin-bottom: 20px;
   background-color: #fff;
   border: 2px solid #212529;
   border-radius: 15px;
 `;
 
 const ItemContent = styled.div`
-  padding: 5px 20px;
+  padding: 4px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -39,6 +40,8 @@ const ButtonContainer = styled.div`
 `;
 
 function DisplayGuests(props) {
+  const currentGuestList = props.guestList.filter(props.filterMethod);
+
   if (props.disableAllFields) {
     return <p>Loading list ...</p>;
   } else if (props.guestList.length === 0) {
@@ -47,7 +50,7 @@ function DisplayGuests(props) {
     return (
       <>
         <List>
-          {props.guestList.map((el) => {
+          {currentGuestList.map((el) => {
             return (
               <ItemContent key={el.id}>
                 <ItemLeftContent id="checkboxNameContainer">
@@ -80,6 +83,20 @@ function DisplayGuests(props) {
             );
           })}
         </List>
+        <ButtonContainer>
+          <SmallButton id="all" onClick={props.handleFilterMethodClick}>
+            All
+          </SmallButton>
+          <SmallButton id="attending" onClick={props.handleFilterMethodClick}>
+            Attending
+          </SmallButton>
+          <SmallButton
+            id="nonAttending"
+            onClick={props.handleFilterMethodClick}
+          >
+            Non-Attending
+          </SmallButton>
+        </ButtonContainer>
         <ButtonContainer>
           <BigButton
             backgroundColor="#f26a4f"

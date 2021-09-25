@@ -26,11 +26,11 @@ const globalStyle = css`
 `;
 
 const ManageListContainer = styled.div`
-  padding: 0 15%;
+  padding: 0 10%;
 `;
 
 const DisplayGuestContainer = styled.div`
-  padding: 0 15%;
+  padding: 0 10%;
 `;
 
 function App() {
@@ -38,9 +38,12 @@ function App() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [disableUpdateButton, setDisableUpdateButton] = useState(true);
-  const [disableAddButton, setDisableAddButton] = useState(false);
+  const [disableAddButton, setDisableAddButton] = useState('');
   const [disableAllFields, setDisableAllFields] = useState(true);
   const [idToUpdate, setIdToUpdate] = useState();
+  const [filterMethod, setFilterMethod] = useState(() => {
+    return (el) => el;
+  });
 
   const firstUpdate = useRef(true);
 
@@ -99,7 +102,7 @@ function App() {
     });
     setFetchList((prev) => [...prev]);
     setDisableUpdateButton(true);
-    setDisableAddButton(false);
+    setDisableAddButton('');
     changeNameInputs('', '');
   }
   // Update the attending status of an individual guest
@@ -173,6 +176,27 @@ function App() {
     deleteAllGuests();
   };
 
+  const handleFilterMethodClick = ({ currentTarget }) => {
+    const buttonId = currentTarget.id;
+    console.log(buttonId);
+
+    if (buttonId === 'all') {
+      setFilterMethod(() => {
+        return (el) => el;
+      });
+    } else if (buttonId === 'attending') {
+      setFilterMethod(() => {
+        return (el) => el.attending;
+      });
+    } else {
+      setFilterMethod(() => {
+        return (el) => !el.attending;
+      });
+    }
+
+    setFetchList((prev) => [...prev]);
+  };
+
   useEffect(() => {
     if (firstUpdate.current === true) {
       firstUpdate.current = false;
@@ -185,6 +209,8 @@ function App() {
     } else {
       fetchGuestListData();
     }
+    setDisableUpdateButton(true);
+    setDisableAddButton('');
   }, [fetchList]);
 
   return (
@@ -210,11 +236,13 @@ function App() {
           <Heading2>Invited People</Heading2>
           <DisplayGuests
             guestList={guestList}
+            filterMethod={filterMethod}
             disableAllFields={disableAllFields}
             handleCheckboxChange={handleCheckboxChange}
             handleGetIndividualPersonData={handleGetIndividualPersonData}
             handleDeleteOneClick={handleDeleteOneClick}
             handleDeleteAllClick={handleDeleteAllClick}
+            handleFilterMethodClick={handleFilterMethodClick}
           />
         </DisplayGuestContainer>
       </MainContainer>

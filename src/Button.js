@@ -19,6 +19,7 @@ const Button = styled.button`
   &:disabled {
     background-color: #ced4da;
     opacity: 0.4;
+    cursor: help;
   }
 `;
 
