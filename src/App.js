@@ -66,76 +66,100 @@ function App() {
 
   // Add a guest to the list
   async function addGuest() {
-    await fetch(`${baseUrl}/`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ firstName: firstName, lastName: lastName }),
-    });
+    try {
+      await fetch(`${baseUrl}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+      });
+      setFetchList((prev) => [...prev]);
+    } catch (error) {
+      console.log(error);
+    }
 
-    setFetchList((prev) => [...prev]);
     changeNameInputs('', '');
   }
   // Get the data of an inidividual guest
   async function getIndividualGuestData(id) {
-    const rawData = await fetch(`${baseUrl}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    const data = await rawData.json();
-    changeNameInputs(data.firstName, data.lastName);
-    setDisableUpdateButton(false);
-    setDisableAddButton(true);
-    setIdToUpdate(id);
+    try {
+      const rawData = await fetch(`${baseUrl}/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = await rawData.json();
+      changeNameInputs(data.firstName, data.lastName);
+      setDisableUpdateButton(false);
+      setDisableAddButton(true);
+      setIdToUpdate(id);
+    } catch (error) {
+      console.log(error);
+    }
   }
   // Update the data of an individual guest
   async function updateGuestData() {
-    await fetch(`${baseUrl}/${idToUpdate}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ firstName: firstName, lastName: lastName }),
-    });
-    setFetchList((prev) => [...prev]);
+    try {
+      await fetch(`${baseUrl}/${idToUpdate}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+      });
+      setFetchList((prev) => [...prev]);
+    } catch (error) {
+      console.log(error);
+    }
     setDisableUpdateButton(true);
     setDisableAddButton('');
     changeNameInputs('', '');
   }
   // Update the attending status of an individual guest
   async function updateAttendingStatus(id, isChecked) {
-    await fetch(`${baseUrl}/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ attending: isChecked }),
-    });
+    try {
+      await fetch(`${baseUrl}/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ attending: isChecked }),
+      });
 
-    setFetchList((prev) => [...prev]);
+      setFetchList((prev) => [...prev]);
+    } catch (error) {
+      console.log(error);
+    }
   }
   // Delete a guest from the guest list
   async function deleteGuest(id) {
-    await fetch(`${baseUrl}/${id}`, {
-      method: 'DELETE',
-    });
+    try {
+      await fetch(`${baseUrl}/${id}`, {
+        method: 'DELETE',
+      });
 
-    setFetchList((prev) => [...prev]);
+      setFetchList((prev) => [...prev]);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // Delete all guest from the guest list
   async function deleteAllGuests() {
-    for (let i = 0; i < guestList.length; i++) {
-      const currentId = guestList[i].id;
-      await fetch(`${baseUrl}/${currentId}`, {
-        method: 'DELETE',
-      });
-    }
+    try {
+      for (let i = 0; i < guestList.length; i++) {
+        const currentId = guestList[i].id;
+        await fetch(`${baseUrl}/${currentId}`, {
+          method: 'DELETE',
+        });
+      }
 
-    setFetchList((prev) => [...prev]);
+      setFetchList((prev) => [...prev]);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // Keep track of input changes
@@ -238,7 +262,7 @@ function App() {
     if (firstUpdate.current === true) {
       firstUpdate.current = false;
 
-      // Simulating the Server Load
+      // Simulating the server laoding at first run
       setTimeout(() => {
         setDisableAllFields(false);
         fetchGuestListData();
