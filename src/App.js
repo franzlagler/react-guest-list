@@ -50,7 +50,7 @@ function App() {
 
   const firstNameInputField = useRef(null);
   const firstUpdate = useRef(true);
-  const baseUrl = 'https://express-guest-list-server.herokuapp.com';
+  const baseUrl = 'https://react-guest-list-server.herokuapp.com/';
 
   const changeNameInputs = (text1, text2) => {
     setFirstName(text1);
