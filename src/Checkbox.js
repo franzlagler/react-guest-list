@@ -9,6 +9,7 @@ const Input = styled.input`
   aspect-ratio: 1;
   border: 1px solid black;
   border-radius: 5px;
+  cursor: pointer;
 
   &:checked {
     background-image: url(${check});

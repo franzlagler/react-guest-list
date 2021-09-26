@@ -1,4 +1,6 @@
+import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
+import loading from '../public/images/loading.svg';
 import BigButton from './BigButton';
 import Checkbox from './Checkbox';
 import LinkButton from './LinkButton';
@@ -44,7 +46,7 @@ const DeleteAllButtonContainer = styled.div`
   justify-content: center;
 `;
 
-const FilterButtonContainer = styled.div`
+const FilterLinkButtonContainer = styled.div`
   padding: 0 16px;
   background-color: #cce3de;
   border-bottom: 2px solid #212529;
@@ -54,11 +56,42 @@ const NoResultsPara = styled.p`
   padding: 8px 16px;
 `;
 
+const LoadingContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const loadingAnimation = keyframes`
+0% {
+  transform: rotate(0deg);
+}
+
+
+50%{
+  transform: rotate(180deg);
+}
+
+75%{
+  transform: rotate(360deg);
+}
+`;
+
+const LoadingImage = styled.img`
+  height: 30px;
+  margin-right: 10px;
+  animation: ${loadingAnimation} ease 5s infinite;
+`;
+
 function DisplayGuests(props) {
   const currentGuestList = props.guestList.filter(props.filterMethod);
 
   if (props.disableAllFields) {
-    return <p>Loading list ...</p>;
+    return (
+      <LoadingContainer>
+        <LoadingImage src={loading} alt="Loading" />
+        <p>Loading list ...</p>{' '}
+      </LoadingContainer>
+    );
   } else if (props.guestList.length === 0) {
     return <p>No people added to the list.</p>;
   } else {
@@ -66,7 +99,7 @@ function DisplayGuests(props) {
       <>
         <List>
           <SearchBar handleSearchBarChange={props.handleSearchBarChange} />
-          <FilterButtonContainer>
+          <FilterLinkButtonContainer>
             <LinkButton id="all" onClick={props.handleFilterMethodClick}>
               All
             </LinkButton>
@@ -79,7 +112,7 @@ function DisplayGuests(props) {
             >
               Non-Attending
             </LinkButton>
-          </FilterButtonContainer>
+          </FilterLinkButtonContainer>
           {currentGuestList !== 0 &&
             currentGuestList.map((el) => {
               return (

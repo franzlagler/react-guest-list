@@ -44,6 +44,7 @@ function App() {
   const [filterMethod, setFilterMethod] = useState(() => {
     return (el) => el;
   });
+
   const firstNameInputField = useRef(null);
   const firstUpdate = useRef(true);
 
@@ -66,7 +67,7 @@ function App() {
 
   // Add a guest to the list
   async function addGuest() {
-    await fetch(`${baseUrl}/`, {
+    await fetch(`${baseUrl}/christmas`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -182,7 +183,6 @@ function App() {
 
   const handleFilterMethodClick = ({ currentTarget }) => {
     const buttonId = currentTarget.id;
-    console.log(buttonId);
 
     if (buttonId === 'all') {
       setFilterMethod(() => {
@@ -197,7 +197,6 @@ function App() {
         return (el) => !el.attending;
       });
     }
-
     setFetchList((prev) => [...prev]);
   };
 
