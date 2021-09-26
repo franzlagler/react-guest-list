@@ -41,16 +41,15 @@ function App() {
   const [disableAddButton, setDisableAddButton] = useState('');
   const [disableAllFields, setDisableAllFields] = useState(true);
   const [idToUpdate, setIdToUpdate] = useState();
+  // Control variable for reloading guest list from server
+  const [fetchList, setFetchList] = useState(['fetch']);
   const [filterMethod, setFilterMethod] = useState(() => {
     return (el) => el;
   });
+  const [noResultFound, setNoResultFound] = useState(false);
 
   const firstNameInputField = useRef(null);
   const firstUpdate = useRef(true);
-
-  // Control variable for reloading guest list from server
-  const [fetchList, setFetchList] = useState(['fetch']);
-
   const baseUrl = 'http://localhost:5000';
 
   const changeNameInputs = (text1, text2) => {
@@ -67,7 +66,7 @@ function App() {
 
   // Add a guest to the list
   async function addGuest() {
-    await fetch(`${baseUrl}/christmas`, {
+    await fetch(`${baseUrl}/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -153,6 +152,16 @@ function App() {
     addGuest();
   };
 
+  const handleCheckboxKeypress = ({ currentTarget, key }) => {
+    if (key === 'Enter') {
+      if (currentTarget.checked) {
+        currentTarget.checked = false;
+        return;
+      }
+      currentTarget.checked = true;
+    }
+  };
+
   const handleCheckboxChange = ({ currentTarget }) => {
     const id = currentTarget.id;
     const isChecked = currentTarget.checked;
@@ -172,6 +181,7 @@ function App() {
   const handleDeleteOneClick = ({ currentTarget }) => {
     const id = currentTarget.id;
     deleteGuest(id);
+    setNoResultFound(false);
   };
 
   const handleDeleteAllClick = () => {
@@ -179,6 +189,8 @@ function App() {
     setFilterMethod(() => {
       return (el) => el;
     });
+
+    setNoResultFound(false);
   };
 
   const handleFilterMethodClick = ({ currentTarget }) => {
@@ -188,6 +200,8 @@ function App() {
       setFilterMethod(() => {
         return (el) => el;
       });
+      setNoResultFound(false);
+      return;
     } else if (buttonId === 'attending') {
       setFilterMethod(() => {
         return (el) => el.attending;
@@ -198,6 +212,7 @@ function App() {
       });
     }
     setFetchList((prev) => [...prev]);
+    setNoResultFound(true);
   };
 
   const handleSearchBarChange = ({ currentTarget }) => {
@@ -207,13 +222,15 @@ function App() {
       setFilterMethod(() => {
         return (el) => el;
       });
-
+      setNoResultFound(false);
       return;
     }
     setFilterMethod(() => {
       return (el) =>
-        el.firstName.includes(input) || el.lastName.includes(input);
+        el.firstName.startsWith(input) || el.lastName.startsWith(input);
     });
+
+    setNoResultFound(true);
   };
 
   // Fetch Guest List from Server
@@ -257,8 +274,10 @@ function App() {
           <Heading2>Invited People</Heading2>
           <DisplayGuests
             guestList={guestList}
+            noResultFound={noResultFound}
             filterMethod={filterMethod}
             disableAllFields={disableAllFields}
+            handleCheckboxKeypress={handleCheckboxKeypress}
             handleCheckboxChange={handleCheckboxChange}
             handleGetIndividualPersonData={handleGetIndividualPersonData}
             handleDeleteOneClick={handleDeleteOneClick}

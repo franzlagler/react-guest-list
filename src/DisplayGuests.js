@@ -52,7 +52,7 @@ const FilterLinkButtonContainer = styled.div`
   border-bottom: 2px solid #212529;
 `;
 
-const NoResultsPara = styled.p`
+const NoItemsPara = styled.p`
   padding: 8px 16px;
 `;
 
@@ -92,8 +92,6 @@ function DisplayGuests(props) {
         <p>Loading list ...</p>{' '}
       </LoadingContainer>
     );
-  } else if (props.guestList.length === 0) {
-    return <p>No people added to the list.</p>;
   } else {
     return (
       <>
@@ -120,6 +118,7 @@ function DisplayGuests(props) {
                   <ItemLeftContent id="checkboxNameContainer">
                     <Checkbox
                       id={el.id}
+                      handleCheckboxKeypress={props.handleCheckboxKeypress}
                       handleCheckboxChange={props.handleCheckboxChange}
                       checked={el.attending}
                     />
@@ -147,7 +146,11 @@ function DisplayGuests(props) {
               );
             })}
           {currentGuestList.length === 0 && (
-            <NoResultsPara>No results found.</NoResultsPara>
+            <NoItemsPara>
+              {props.noResultFound
+                ? 'No results found.'
+                : 'No person added to the list.'}
+            </NoItemsPara>
           )}
         </List>
 

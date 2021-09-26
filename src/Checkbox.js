@@ -24,8 +24,10 @@ function Checkbox(props) {
     <Input
       type="checkbox"
       id={props.id}
+      onKeyPress={props.handleCheckboxKeypress}
       onChange={props.handleCheckboxChange}
       checked={props.checked}
+      aria-label="check"
     />
   );
 }
