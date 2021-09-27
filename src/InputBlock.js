@@ -32,7 +32,7 @@ function InputBlock(props) {
       <Label htmlFor={props.id}>{props.name}</Label>
       <Input
         id={props.id}
-        onChange={props.handleInputChange}
+        onChange={props.handleNameChange}
         value={props.value}
         disabled={props.disabled}
         ref={props.firstNameInputField}

@@ -16,7 +16,7 @@ function ManageListContainer(props) {
         id="firstName"
         name="First Name"
         value={props.firstName}
-        handleInputChange={props.handleFirstNameInputChange}
+        handleNameChange={props.handleNameChange}
         disabled={props.disableAllFields}
         firstNameInputField={props.firstNameInputField}
       />
@@ -24,7 +24,7 @@ function ManageListContainer(props) {
         id="lastName"
         name="Last Name"
         value={props.lastName}
-        handleInputChange={props.handleLastNameInputChange}
+        handleNameChange={props.handleNameChange}
         disabled={props.disableAllFields}
       />
       <ButtonGroup>

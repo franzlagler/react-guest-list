@@ -37,12 +37,13 @@ function App() {
   const [guestList, setGuestList] = useState([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [name, setName] = useState(['', '']);
   const [disableUpdateButton, setDisableUpdateButton] = useState(true);
   const [disableAddButton, setDisableAddButton] = useState('');
   const [disableAllFields, setDisableAllFields] = useState(true);
   const [idToUpdate, setIdToUpdate] = useState();
   // Control variable for reloading guest list from server
-  const [fetchList, setFetchList] = useState(['fetch']);
+  const [fetchList, setFetchList] = useState(['true']);
   const [filterMethod, setFilterMethod] = useState(() => {
     return (el) => el;
   });
@@ -72,7 +73,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+        body: JSON.stringify({ firstName: name[0], lastName: name[1] }),
       });
       setFetchList((prev) => [...prev]);
     } catch (error) {
@@ -163,13 +164,16 @@ function App() {
   }
 
   // Keep track of input changes
-  const handleFirstNameInputChange = ({ currentTarget }) => {
+
+  const handleNameChange = ({ currentTarget }) => {
+    const id = currentTarget.id;
     const input = currentTarget.value;
-    setFirstName(input);
-  };
-  const handleLastNameInputChange = ({ currentTarget }) => {
-    const input = currentTarget.value;
-    setLastName(input);
+
+    if (id === 'firstName') {
+      setName((prev) => [...prev, (prev[0] = input)]);
+    } else {
+      setName((prev) => [...prev, (prev[1] = input)]);
+    }
   };
 
   const handleAddClick = () => {
@@ -262,7 +266,7 @@ function App() {
     if (firstUpdate.current === true) {
       firstUpdate.current = false;
 
-      // Simulating the server laoding at first run
+      // Simulating the server loading at first run
       setTimeout(() => {
         setDisableAllFields(false);
         fetchGuestListData();
@@ -281,10 +285,9 @@ function App() {
         <MainHeading />
         <ManageListContainer>
           <ManageList
-            firstName={firstName}
-            lastName={lastName}
-            handleFirstNameInputChange={handleFirstNameInputChange}
-            handleLastNameInputChange={handleLastNameInputChange}
+            firstName={name[0]}
+            lastName={name[1]}
+            handleNameChange={handleNameChange}
             handleAddClick={handleAddClick}
             handleUpdateClick={handleUpdateClick}
             disableAddButton={disableAddButton}
