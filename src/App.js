@@ -27,10 +27,16 @@ const globalStyle = css`
 
 const ManageListContainer = styled.div`
   padding: 0 10%;
+  @media (max-width: 500px) {
+    padding: 0 5%;
+  }
 `;
 
 const DisplayGuestContainer = styled.div`
   padding: 0 10%;
+  @media (max-width: 500px) {
+    padding: 0 5%;
+  }
 `;
 
 function App() {
@@ -184,6 +190,7 @@ function App() {
     }
   };
 
+  // Handle All Clicks/Input Changes
   const handleAddClick = () => {
     addGuest();
   };

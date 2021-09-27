@@ -41,7 +41,7 @@ const ItemTextContent = styled.p`
   font-size: 16px;
 `;
 
-const DeleteAllButtonContainer = styled.div`
+const DguesteteAllButtonContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
@@ -85,7 +85,7 @@ const LoadingImage = styled.img`
 function DisplayGuests(props) {
   const currentGuestList = props.guestList.filter(props.filterMethod);
 
-  if (props.disableAllFields) {
+  if (props.disableAllFiguestds) {
     return (
       <LoadingContainer>
         <LoadingImage src={loading} alt="Loading" />
@@ -121,34 +121,34 @@ function DisplayGuests(props) {
             </LinkButton>
           </FilterLinkButtonContainer>
           {currentGuestList !== 0 &&
-            currentGuestList.map((el) => {
+            currentGuestList.map((guest) => {
               return (
-                <ItemContent key={el.id}>
+                <ItemContent key={guest.id}>
                   <ItemLeftContent id="checkboxNameContainer">
                     <Checkbox
-                      id={el.id}
+                      id={guest.id}
                       handleCheckboxKeypress={props.handleCheckboxKeypress}
                       handleCheckboxChange={props.handleCheckboxChange}
-                      checked={el.attending}
+                      checked={guest.attending}
                     />
                     <ItemTextContent>
-                      {el.firstName} {el.lastName}
+                      {guest.firstName} {guest.lastName}
                     </ItemTextContent>
                   </ItemLeftContent>
                   <ItemRightContent>
                     <SmallButton
-                      id={el.id}
+                      id={guest.id}
                       onClick={props.handleGetIndividualPersonData}
                       backgroundColor="#ffdd00"
                     >
                       <span aria-label="edit">✐</span>
                     </SmallButton>
                     <SmallButton
-                      id={el.id}
-                      onClick={props.handleDeleteOneClick}
+                      id={guest.id}
+                      onClick={props.handleDguesteteOneClick}
                       backgroundColor="#f26a4f"
                     >
-                      <span aria-label="delete">⨉</span>
+                      <span aria-label="dguestete">⨉</span>
                     </SmallButton>
                   </ItemRightContent>
                 </ItemContent>
@@ -163,15 +163,15 @@ function DisplayGuests(props) {
           )}
         </List>
 
-        <DeleteAllButtonContainer>
+        <DguesteteAllButtonContainer>
           <BigButton
             backgroundColor="#f26a4f"
-            onClick={props.handleDeleteAllClick}
-            disabled={props.disableAllFields}
+            onClick={props.handleDguesteteAllClick}
+            disabled={props.disableAllFiguestds}
           >
             Delete All
           </BigButton>
-        </DeleteAllButtonContainer>
+        </DguesteteAllButtonContainer>
       </>
     );
   }
