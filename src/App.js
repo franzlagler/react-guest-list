@@ -34,23 +34,34 @@ const DisplayGuestContainer = styled.div`
 `;
 
 function App() {
+  //
   const [guestList, setGuestList] = useState([]);
   const [name, setName] = useState(['', '']);
-  const [disableUpdateButton, setDisableUpdateButton] = useState(true);
-  const [disableAddButton, setDisableAddButton] = useState('');
-  const [disableAllFields, setDisableAllFields] = useState(true);
-  const [idToUpdate, setIdToUpdate] = useState();
   // Control variable for reloading guest list from server
   const [fetchList, setFetchList] = useState(['true']);
+  // Save id for updating
+  const [idToUpdate, setIdToUpdate] = useState();
+  // Select according filter method
   const [filterMethod, setFilterMethod] = useState(() => {
     return (el) => el;
   });
+
+  // Visually Underlining  selected filter
+  const [underline, setUnderline] = useState([false, false, false]);
+
+  // Control usability of fields/buttons
+  const [disableAllFields, setDisableAllFields] = useState(true);
+  const [disableUpdateButton, setDisableUpdateButton] = useState(true);
+  const [disableAddButton, setDisableAddButton] = useState('');
+
+  // Control output text when no items
   const [noResultFound, setNoResultFound] = useState(false);
 
   const firstNameInputField = useRef(null);
   const firstUpdate = useRef(true);
   const baseUrl = 'https://react-guest-list-server.herokuapp.com';
 
+  // Change Input Values
   const changeNameInputs = (text1, text2) => {
     setName((prev) => [...prev, (prev[0] = text1), (prev[1] = text2)]);
   };
@@ -225,16 +236,34 @@ function App() {
       setFilterMethod(() => {
         return (el) => el;
       });
+      setUnderline((prev) => [
+        ...prev,
+        (prev[0] = true),
+        (prev[1] = false),
+        (prev[2] = false),
+      ]);
       setNoResultFound(false);
       return;
     } else if (buttonId === 'attending') {
       setFilterMethod(() => {
         return (el) => el.attending;
       });
+      setUnderline((prev) => [
+        ...prev,
+        (prev[0] = false),
+        (prev[1] = true),
+        (prev[2] = false),
+      ]);
     } else {
       setFilterMethod(() => {
         return (el) => !el.attending;
       });
+      setUnderline((prev) => [
+        ...prev,
+        (prev[0] = false),
+        (prev[1] = false),
+        (prev[2] = true),
+      ]);
     }
     setFetchList((prev) => [...prev]);
     setNoResultFound(true);
@@ -299,8 +328,9 @@ function App() {
           <DisplayGuests
             guestList={guestList}
             noResultFound={noResultFound}
-            filterMethod={filterMethod}
+            underline={underline}
             disableAllFields={disableAllFields}
+            filterMethod={filterMethod}
             handleCheckboxKeypress={handleCheckboxKeypress}
             handleCheckboxChange={handleCheckboxChange}
             handleGetIndividualPersonData={handleGetIndividualPersonData}

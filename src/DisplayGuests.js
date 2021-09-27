@@ -98,13 +98,22 @@ function DisplayGuests(props) {
         <List>
           <SearchBar handleSearchBarChange={props.handleSearchBarChange} />
           <FilterLinkButtonContainer>
-            <LinkButton id="all" onClick={props.handleFilterMethodClick}>
+            <LinkButton
+              underline={props.underline[0]}
+              id="all"
+              onClick={props.handleFilterMethodClick}
+            >
               All
             </LinkButton>
-            <LinkButton id="attending" onClick={props.handleFilterMethodClick}>
+            <LinkButton
+              underline={props.underline[1]}
+              id="attending"
+              onClick={props.handleFilterMethodClick}
+            >
               Attending
             </LinkButton>
             <LinkButton
+              underline={props.underline[2]}
               id="nonAttending"
               onClick={props.handleFilterMethodClick}
             >
