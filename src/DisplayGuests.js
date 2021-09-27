@@ -41,7 +41,7 @@ const ItemTextContent = styled.p`
   font-size: 16px;
 `;
 
-const DguesteteAllButtonContainer = styled.div`
+const DeleteAllButtonContainer = styled.div`
   display: flex;
   justify-content: center;
 `;
@@ -85,7 +85,7 @@ const LoadingImage = styled.img`
 function DisplayGuests(props) {
   const currentGuestList = props.guestList.filter(props.filterMethod);
 
-  if (props.disableAllFiguestds) {
+  if (props.disableAllFields) {
     return (
       <LoadingContainer>
         <LoadingImage src={loading} alt="Loading" />
@@ -145,10 +145,10 @@ function DisplayGuests(props) {
                     </SmallButton>
                     <SmallButton
                       id={guest.id}
-                      onClick={props.handleDguesteteOneClick}
+                      onClick={props.handleDeleteOneClick}
                       backgroundColor="#f26a4f"
                     >
-                      <span aria-label="dguestete">⨉</span>
+                      <span aria-label="delete">⨉</span>
                     </SmallButton>
                   </ItemRightContent>
                 </ItemContent>
@@ -163,15 +163,15 @@ function DisplayGuests(props) {
           )}
         </List>
 
-        <DguesteteAllButtonContainer>
+        <DeleteAllButtonContainer>
           <BigButton
             backgroundColor="#f26a4f"
-            onClick={props.handleDguesteteAllClick}
-            disabled={props.disableAllFiguestds}
+            onClick={props.handleDeleteAllClick}
+            disabled={props.disableAllFields}
           >
             Delete All
           </BigButton>
-        </DguesteteAllButtonContainer>
+        </DeleteAllButtonContainer>
       </>
     );
   }
