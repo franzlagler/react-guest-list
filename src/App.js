@@ -42,7 +42,9 @@ const DisplayGuestContainer = styled.div`
 function App() {
   //
   const [guestList, setGuestList] = useState([]);
-  const [name, setName] = useState(['', '']);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
   // Control variable for reloading guest list from server
   const [fetchList, setFetchList] = useState(['true']);
   // Save id for updating
@@ -69,7 +71,8 @@ function App() {
 
   // Change Input Values
   const changeNameInputs = (text1, text2) => {
-    setName((prev) => [...prev, (prev[0] = text1), (prev[1] = text2)]);
+    setFirstName(text1);
+    setLastName(text2);
   };
 
   // Get guest list data from server
@@ -87,7 +90,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName: name[0], lastName: name[1] }),
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
       });
       setFetchList((prev) => [...prev]);
     } catch (error) {
@@ -122,7 +125,7 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName: name[0], lastName: name[1] }),
+        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
       });
       setFetchList((prev) => [...prev]);
     } catch (error) {
@@ -184,9 +187,9 @@ function App() {
     const input = currentTarget.value;
 
     if (id === 'firstName') {
-      setName((prev) => [...prev, (prev[0] = input)]);
+      setFirstName(input);
     } else {
-      setName((prev) => [...prev, (prev[1] = input)]);
+      setLastName(input);
     }
   };
 
@@ -318,8 +321,8 @@ function App() {
         <MainHeading />
         <ManageListContainer>
           <ManageList
-            firstName={name[0]}
-            lastName={name[1]}
+            firstName={firstName}
+            lastName={lastName}
             handleNameChange={handleNameChange}
             handleAddClick={handleAddClick}
             handleUpdateClick={handleUpdateClick}
