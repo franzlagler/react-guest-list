@@ -55,7 +55,7 @@ function App() {
   });
 
   // Visually Underlining  selected filter
-  const [underline, setUnderline] = useState([false, false, false]);
+  const [underline, setUnderline] = useState([true, false, false]);
 
   // Control usability of fields/buttons
   const [disableAllFields, setDisableAllFields] = useState(true);
@@ -246,34 +246,19 @@ function App() {
       setFilterMethod(() => {
         return (el) => el;
       });
-      setUnderline((prev) => [
-        ...prev,
-        (prev[0] = true),
-        (prev[1] = false),
-        (prev[2] = false),
-      ]);
+      setUnderline([true, false, false]);
       setNoResultFound(false);
       return;
     } else if (buttonId === 'attending') {
       setFilterMethod(() => {
         return (el) => el.attending;
       });
-      setUnderline((prev) => [
-        ...prev,
-        (prev[0] = false),
-        (prev[1] = true),
-        (prev[2] = false),
-      ]);
+      setUnderline([false, true, false]);
     } else {
       setFilterMethod(() => {
         return (el) => !el.attending;
       });
-      setUnderline((prev) => [
-        ...prev,
-        (prev[0] = false),
-        (prev[1] = false),
-        (prev[2] = true),
-      ]);
+      setUnderline([false, false, true]);
     }
     setFetchList((prev) => [...prev]);
     setNoResultFound(true);
