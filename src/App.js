@@ -35,8 +35,6 @@ const DisplayGuestContainer = styled.div`
 
 function App() {
   const [guestList, setGuestList] = useState([]);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
   const [name, setName] = useState(['', '']);
   const [disableUpdateButton, setDisableUpdateButton] = useState(true);
   const [disableAddButton, setDisableAddButton] = useState('');
@@ -54,8 +52,7 @@ function App() {
   const baseUrl = 'https://react-guest-list-server.herokuapp.com';
 
   const changeNameInputs = (text1, text2) => {
-    setFirstName(text1);
-    setLastName(text2);
+    setName((prev) => [...prev, (prev[0] = text1), (prev[1] = text2)]);
   };
 
   // Get guest list data from server
@@ -108,15 +105,15 @@ function App() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ firstName: firstName, lastName: lastName }),
+        body: JSON.stringify({ firstName: name[0], lastName: name[1] }),
       });
       setFetchList((prev) => [...prev]);
     } catch (error) {
       console.log(error);
     }
+    changeNameInputs('', '');
     setDisableUpdateButton(true);
     setDisableAddButton('');
-    changeNameInputs('', '');
   }
   // Update the attending status of an individual guest
   async function updateAttendingStatus(id, isChecked) {
